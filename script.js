@@ -49,16 +49,16 @@ function analyzeSentiment(text) {
   return score > 0 ? "📈 Positive" : score < 0 ? "📉 Negative" : "➡ Neutral";
 }
 
-// Fetch forex prices from backend
-async function getLivePrices() {
-  const res = await fetch('/api/forex');
+// Fetch forex prices for selected pair
+async function getLivePrices(from="EUR", to="USD") {
+  const res = await fetch(`/api/forex?from=${from}&to=${to}`);
   const data = await res.json();
   if (!data["Time Series FX (5min)"]) return [];
   const prices = Object.values(data["Time Series FX (5min)"]).map(p => parseFloat(p["4. close"]));
   return prices.reverse();
 }
 
-// Fetch news from backend
+// Fetch news (generic forex headlines for now)
 async function loadNews() {
   const res = await fetch('/api/news');
   const data = await res.json();
@@ -73,9 +73,12 @@ async function loadNews() {
   });
 }
 
-// Dashboard
+// Dashboard runner with pair selection
 async function runDashboard() {
-  const prices = await getLivePrices();
+  const from = document.getElementById("fromCurrency").value;
+  const to = document.getElementById("toCurrency").value;
+
+  const prices = await getLivePrices(from, to);
   if (prices.length === 0) return;
 
   const signals = [];
@@ -92,7 +95,6 @@ async function runDashboard() {
     list.appendChild(li);
   });
 
-  // Consensus
   const bullish = signals.filter(s => s.includes("📈")).length;
   const bearish = signals.filter(s => s.includes("📉")).length;
   let consensus = bullish > bearish ? "Consensus: 📈 Rising" : bearish > bullish ? "Consensus: 📉 Falling" : "Consensus: ➡ Neutral";
