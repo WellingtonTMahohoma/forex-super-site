@@ -78,7 +78,7 @@ async function runDashboard() {
   const from = document.getElementById("fromCurrency").value;
   const to = document.getElementById("toCurrency").value;
 
-  // Update signals
+  // --- Signals ---
   const prices = await getLivePrices(from, to);
   if (prices.length === 0) return;
 
@@ -101,18 +101,23 @@ async function runDashboard() {
   let consensus = bullish > bearish ? "Consensus: 📈 Rising" : bearish > bullish ? "Consensus: 📉 Falling" : "Consensus: ➡ Neutral";
   document.getElementById("consensus").innerText = consensus;
 
-  // 🔄 Update TradingView chart dynamically
-  new TradingView.widget({
-    "width": "100%",
-    "height": 400,
-    "symbol": `FX:${from}${to}`,   // e.g. FX:GBPUSD
-    "interval": "60",
-    "timezone": "Etc/UTC",
-    "theme": "dark",
-    "style": "1",
-    "locale": "en",
-    "container_id": "tradingview_chart" // must match div ID
-  });
+  // --- TradingView Chart ---
+  // Do NOT clear the div. Just re-render the widget.
+  if (typeof TradingView !== "undefined") {
+    new TradingView.widget({
+      "width": "100%",
+      "height": 400,
+      "symbol": `FX:${from}${to}`,   // e.g. FX:GBPUSD
+      "interval": "60",
+      "timezone": "Etc/UTC",
+      "theme": "dark",
+      "style": "1",
+      "locale": "en",
+      "container_id": "tradingview_chart"
+    });
+  } else {
+    console.error("TradingView library not loaded yet!");
+  }
 }
 
 // Auto-refresh every minute
