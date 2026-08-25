@@ -58,7 +58,7 @@ async function getLivePrices(from="EUR", to="USD") {
   return prices.reverse();
 }
 
-// Fetch news (generic forex headlines for now)
+// Fetch news
 async function loadNews() {
   const res = await fetch('/api/news');
   const data = await res.json();
@@ -75,11 +75,10 @@ async function loadNews() {
 
 // Dashboard runner with pair selection
 async function runDashboard() {
-  console.log("Update Dashboard clicked!");
   const from = document.getElementById("fromCurrency").value;
   const to = document.getElementById("toCurrency").value;
-  console.log("Selected pair:", from, "/", to);
 
+  // Update signals
   const prices = await getLivePrices(from, to);
   if (prices.length === 0) return;
 
@@ -103,17 +102,18 @@ async function runDashboard() {
   document.getElementById("consensus").innerText = consensus;
 
   // 🔄 Update TradingView chart dynamically
-  document.getElementById("tradingview_chart").innerHTML = "";
+  const chartDiv = document.getElementById("tradingview_chart");
+  chartDiv.innerHTML = ""; // clear old chart
   new TradingView.widget({
     "width": "100%",
     "height": 400,
-    "symbol": `FX:${from}${to}`,
+    "symbol": `FX:${from}${to}`,   // e.g. FX:GBPUSD
     "interval": "60",
     "timezone": "Etc/UTC",
     "theme": "dark",
     "style": "1",
     "locale": "en",
-    "container_id": "tradingview_chart"
+    "container_id": "tradingview_chart" // must match div ID
   });
 }
 
