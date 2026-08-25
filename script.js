@@ -72,6 +72,7 @@ async function loadNews() {
     feed.appendChild(li);
   });
 }
+
 // Dashboard
 async function runDashboard() {
   const from = document.getElementById("fromCurrency").value;
@@ -101,7 +102,6 @@ async function runDashboard() {
   document.getElementById("consensus").innerText = consensus;
 
   // 🔄 Update TradingView chart dynamically
-  // ❌ Do NOT clear the div itself
   new TradingView.widget({
     "width": "100%",
     "height": 400,
@@ -114,7 +114,6 @@ async function runDashboard() {
     "container_id": "tradingview_chart" // must match div ID
   });
 }
-
 
 // Auto-refresh every minute
 setInterval(() => {
