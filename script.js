@@ -75,8 +75,10 @@ async function loadNews() {
 
 // Dashboard runner with pair selection
 async function runDashboard() {
+  console.log("Update Dashboard clicked!");
   const from = document.getElementById("fromCurrency").value;
   const to = document.getElementById("toCurrency").value;
+  console.log("Selected pair:", from, "/", to);
 
   const prices = await getLivePrices(from, to);
   if (prices.length === 0) return;
@@ -99,6 +101,20 @@ async function runDashboard() {
   const bearish = signals.filter(s => s.includes("📉")).length;
   let consensus = bullish > bearish ? "Consensus: 📈 Rising" : bearish > bullish ? "Consensus: 📉 Falling" : "Consensus: ➡ Neutral";
   document.getElementById("consensus").innerText = consensus;
+
+  // 🔄 Update TradingView chart dynamically
+  document.getElementById("tradingview_chart").innerHTML = "";
+  new TradingView.widget({
+    "width": "100%",
+    "height": 400,
+    "symbol": `FX:${from}${to}`,
+    "interval": "60",
+    "timezone": "Etc/UTC",
+    "theme": "dark",
+    "style": "1",
+    "locale": "en",
+    "container_id": "tradingview_chart"
+  });
 }
 
 // Auto-refresh every minute
