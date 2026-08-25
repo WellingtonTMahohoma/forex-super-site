@@ -1,15 +1,3 @@
-// Replace with your API keys
-const alphaKey = "CMOFYBX6E09TVMNU";
-const newsKey = "wk_ZqBdItxFX4Yo5lG-1lG_HRvJ9yDQa6RN0c0biXtdSL2L1cDtk4ltzNP23ObwJkeA";
-
-// Fetch live forex prices (EUR/USD)
-async function getLivePrices() {
-  const res = await fetch(`https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=EUR&to_symbol=USD&interval=5min&apikey=${alphaKey}`);
-  const data = await res.json();
-  const prices = Object.values(data["Time Series FX (5min)"]).map(p => parseFloat(p["4. close"]));
-  return prices.reverse(); // latest first
-}
-
 // Moving Average
 function movingAverage(data, window) {
   let result = [];
@@ -61,11 +49,22 @@ function analyzeSentiment(text) {
   return score > 0 ? "📈 Positive" : score < 0 ? "📉 Negative" : "➡ Neutral";
 }
 
+// Fetch forex prices from backend
+async function getLivePrices() {
+  const res = await fetch('/api/forex');
+  const data = await res.json();
+  if (!data["Time Series FX (5min)"]) return [];
+  const prices = Object.values(data["Time Series FX (5min)"]).map(p => parseFloat(p["4. close"]));
+  return prices.reverse();
+}
+
+// Fetch news from backend
 async function loadNews() {
-  const res = await fetch(`https://newsapi.org/v2/everything?q=forex&apiKey=${newsKey}`);
+  const res = await fetch('/api/news');
   const data = await res.json();
   const feed = document.getElementById("newsFeed");
   feed.innerHTML = "";
+  if (!data.articles) return;
   data.articles.slice(0,5).forEach(article => {
     const sentiment = analyzeSentiment(article.title + " " + article.description);
     const li = document.createElement("li");
@@ -77,6 +76,8 @@ async function loadNews() {
 // Dashboard
 async function runDashboard() {
   const prices = await getLivePrices();
+  if (prices.length === 0) return;
+
   const signals = [];
   signals.push("Moving Average: " + (movingAverage(prices,3).at(-1) > movingAverage(prices,5).at(-1) ? "📈 Rising" : "📉 Falling"));
   signals.push("RSI: " + getRSISignal(prices));
