@@ -21,3 +21,4 @@ This project is an educational site that:
 
 
 API KEY- CMOFYBX6E09TVMNU
+News API KEY- 3f18f23443c0413ab1e2a339837688f9
