@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>(Wellaz)Forex Super Terminal</h1>
+  <h1>(Wellaz) Forex Super Terminal</h1>
 
   <!-- Currency Pair Selection -->
   <div id="pairSelector">
@@ -33,14 +33,13 @@
     <button onclick="runDashboard()">Update Dashboard</button>
   </div>
 
- <!-- Live TradingView Chart -->
-<div id="chart">
-  <div id="tradingview_chart"></div>
-</div>
+  <!-- Live TradingView Chart -->
+  <div id="chart">
+    <div id="tradingview_chart"></div>
+  </div>
 
-<!-- Load TradingView library once -->
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-
+  <!-- Load TradingView library once -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
   <!-- Dashboard Signals -->
   <h2>Dashboard Signals</h2>
@@ -54,5 +53,13 @@
   <ul id="newsFeed"></ul>
 
   <script src="script.js"></script>
+
+  <!-- Ensure dashboard runs after everything loads -->
+  <script>
+    window.onload = () => {
+      runDashboard();
+      loadNews();
+    };
+  </script>
 </body>
 </html>
