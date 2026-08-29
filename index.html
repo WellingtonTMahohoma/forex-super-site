@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>(WELLAZ) Forex Super Terminal</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Forex Super Study Terminal</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>(Wellaz) Forex Super Terminal</h1>
+  <h1>Forex Super Study Terminal</h1>
 
-  <!-- Currency Pair Selection -->
-  <div id="pairSelector">
+  <!-- Currency Selector -->
+  <div class="currency-select">
     <label for="fromCurrency">From:</label>
     <select id="fromCurrency">
       <option value="EUR">EUR</option>
       <option value="USD">USD</option>
       <option value="GBP">GBP</option>
       <option value="JPY">JPY</option>
-      <option value="AUD">AUD</option>
-      <option value="CAD">CAD</option>
     </select>
 
     <label for="toCurrency">To:</label>
@@ -26,44 +24,30 @@
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
       <option value="JPY">JPY</option>
-      <option value="AUD">AUD</option>
-      <option value="CAD">CAD</option>
     </select>
 
-    <button onclick="runDashboard()">Update Dashboard</button>
+    <button onclick="runDashboard()">Update</button>
   </div>
 
-  <!-- Live TradingView Chart -->
-  <div id="chart">
-    <div id="tradingview_chart"></div>
+  <!-- TradingView Chart -->
+  <div id="tradingview_chart"></div>
+
+  <!-- Indicator Grid -->
+  <div class="indicator-grid">
+    <div class="indicator-card" id="maCard"></div>
+    <div class="indicator-card" id="rsiCard"></div>
+    <div class="indicator-card" id="macdCard"></div>
+    <div class="indicator-card" id="bollingerCard"></div>
+    <div class="indicator-card" id="newsCard"></div>
   </div>
 
-  <!-- Load TradingView library once -->
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-
-  <!-- Dashboard Signals -->
-  <h2>Dashboard Signals</h2>
-  <ul id="signals"></ul>
-
-  <!-- Consensus -->
-  <h3 id="consensus">Consensus: ➡ Neutral</h3>
+  <!-- Consensus Panel -->
+  <div class="consensus-panel" id="consensus"></div>
 
   <!-- News Feed -->
-  <h2>Forex News Feed</h2>
+  <h2>Latest News</h2>
   <ul id="newsFeed"></ul>
 
   <script src="script.js"></script>
-
-  <!-- Ensure dashboard runs after everything loads -->
-  <script>
-  window.onload = () => {
-    // Delay to ensure TradingView script is ready
-    setTimeout(() => {
-      runDashboard();
-      loadNews();
-    }, 500);
-  };
-</script>
-
 </body>
 </html>
