@@ -121,10 +121,10 @@ async function runDashboard() {
 }
 
 // Auto-refresh every minute
-setInterval(() => {
-  runDashboard();
-  loadNews();
-}, 60000);
+//setInterval(() => {
+  //runDashboard();
+  //loadNews();
+//}, 60000);
 
 // Initial load
 //runDashboard();
