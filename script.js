@@ -90,16 +90,17 @@ function loadChart(from, to) {
   if (typeof TradingView !== "undefined") {
     console.log("TradingView is ready, rendering widget...");
     new TradingView.widget({
-      "width": "100%",
-      "height": 400,
-      "symbol": `FX:${from}${to}`,   // e.g. FX:EURUSD
-      "interval": "60",
-      "timezone": "Etc/UTC",
-      "theme": "dark",
-      "style": "1",
-      "locale": "en",
-      "container_id": "tradingview_chart"
-    });
+  "width": "100%",
+  "height": 400,
+  "symbol": `FX:${from}${to}`,   // e.g. FX:EURUSD
+  "interval": "D",               // Daily candles
+  "timezone": "Etc/UTC",
+  "theme": "dark",
+  "style": "1",
+  "locale": "en",
+  "container_id": "tradingview_chart"
+});
+
   } else {
     console.error("TradingView not ready yet, retrying...");
     setTimeout(() => loadChart(from, to), 1000); // retry after 1s
