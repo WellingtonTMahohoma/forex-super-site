@@ -50,13 +50,20 @@ function analyzeSentiment(text) {
 }
 
 // Fetch forex prices for selected pair
+// Fetch forex prices for selected pair
 async function getLivePrices(from="EUR", to="USD") {
   const res = await fetch(`/api/forex?from=${from}&to=${to}`);
   const data = await res.json();
-  if (!data["Time Series FX (5min)"]) return [];
-  const prices = Object.values(data["Time Series FX (5min)"]).map(p => parseFloat(p["4. close"]));
-  return prices.reverse();
+
+  // Use Daily instead of Intraday
+  if (!data["Time Series FX (Daily)"]) return [];
+
+  const prices = Object.values(data["Time Series FX (Daily)"])
+    .map(p => parseFloat(p["4. close"]));
+
+  return prices.reverse(); // oldest → newest
 }
+
 
 // Fetch news
 async function loadNews() {
