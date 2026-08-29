@@ -49,8 +49,7 @@ function analyzeSentiment(text) {
   return score > 0 ? "📈 Positive" : score < 0 ? "📉 Negative" : "➡ Neutral";
 }
 
-// Fetch forex prices for selected pair
-// Fetch forex prices for selected pair
+// Fetch forex prices for selected pair (Daily)
 async function getLivePrices(from="EUR", to="USD") {
   const res = await fetch(`/api/forex?from=${from}&to=${to}`);
   const data = await res.json();
@@ -63,6 +62,7 @@ async function getLivePrices(from="EUR", to="USD") {
 
   return prices.reverse(); // oldest → newest
 }
+
 
 
 // Fetch news
