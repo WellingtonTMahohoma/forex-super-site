@@ -56,10 +56,14 @@
 
   <!-- Ensure dashboard runs after everything loads -->
   <script>
-    window.onload = () => {
+  window.onload = () => {
+    // Delay to ensure TradingView script is ready
+    setTimeout(() => {
       runDashboard();
       loadNews();
-    };
-  </script>
+    }, 500);
+  };
+</script>
+
 </body>
 </html>
