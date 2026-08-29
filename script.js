@@ -73,6 +73,32 @@ async function loadNews() {
   });
 }
 
+// Safe chart loader with retry
+function loadChart(from, to) {
+  console.log("Attempting to load chart for:", `FX:${from}${to}`);
+  if (from === to) {
+    console.error("Invalid pair: identical currencies");
+    return;
+  }
+  if (typeof TradingView !== "undefined") {
+    console.log("TradingView is ready, rendering widget...");
+    new TradingView.widget({
+      "width": "100%",
+      "height": 400,
+      "symbol": `FX:${from}${to}`,   // e.g. FX:EURUSD
+      "interval": "60",
+      "timezone": "Etc/UTC",
+      "theme": "dark",
+      "style": "1",
+      "locale": "en",
+      "container_id": "tradingview_chart"
+    });
+  } else {
+    console.error("TradingView not ready yet, retrying...");
+    setTimeout(() => loadChart(from, to), 1000); // retry after 1s
+  }
+}
+
 // Dashboard
 async function runDashboard() {
   const from = document.getElementById("fromCurrency").value;
@@ -102,30 +128,11 @@ async function runDashboard() {
   document.getElementById("consensus").innerText = consensus;
 
   // --- TradingView Chart ---
-  // Do NOT clear the div. Just re-render the widget.
-  if (typeof TradingView !== "undefined") {
-    new TradingView.widget({
-      "width": "100%",
-      "height": 400,
-      "symbol": `FX:${from}${to}`,   // e.g. FX:GBPUSD
-      "interval": "60",
-      "timezone": "Etc/UTC",
-      "theme": "dark",
-      "style": "1",
-      "locale": "en",
-      "container_id": "tradingview_chart"
-    });
-  } else {
-    console.error("TradingView library not loaded yet!");
-  }
+  loadChart(from, to);
 }
 
 // Auto-refresh every minute
-//setInterval(() => {
-  //runDashboard();
-  //loadNews();
-//}, 60000);
-
-// Initial load
-//runDashboard();
-//loadNews();
+setInterval(() => {
+  runDashboard();
+  loadNews();
+}, 60000);
