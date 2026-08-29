@@ -127,5 +127,5 @@ setInterval(() => {
 }, 60000);
 
 // Initial load
-runDashboard();
-loadNews();
+//runDashboard();
+//loadNews();
